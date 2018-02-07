@@ -1,22 +1,13 @@
 {
-  "name": "smn-ui",
-  "version": "2.7.2",
-  "description": "Pacote de componentes de interface desenvolvidos com AngularJS e Material Design",
+  "name": "test-pack-ui",
+  "version": "1.0.0",
+  "description": "Apenas TEstes",
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/smn-official/smn-ui.git"
+    "url": "git+https://github.com/GustavoMaritan/teste-ui.git"
   },
-  "authors": [
-    "Mario Santos <mariocsants@gmail.com>",
-    "Ítalo Andrade <andraditalo@gmail.com>",
-    "Claudanilo Xavier <claudaniloxavier@gmail.com>"
-  ],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/smn-official/smn-ui/issues"
-  },
-  "homepage": "https://github.com/smn-official/smn-ui#readme",
   "devDependencies": {
     "babel-preset-env": "^1.1.8",
     "babel-preset-es2015": "^6.22.0",
