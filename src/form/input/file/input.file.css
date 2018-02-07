@@ -1,7 +1,0 @@
-.ui-input-file-hidden {
-    position: fixed;
-    width: 0;
-    height: 0;
-    opacity: 0;
-    top: -9999px;
-}
