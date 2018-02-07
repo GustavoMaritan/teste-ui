@@ -1,0 +1,134 @@
+ui-multi-handle {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 16px;
+}
+
+ui-multi-handle .range-bar, ui-multi-handle .points {
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+/*  Range Bar  */
+ui-multi-handle .range-bar {
+    background-color: #bdbdbd;
+    height: 2px;
+}
+
+/*  Points  */
+ui-multi-handle .points {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+ui-multi-handle .point {
+    padding: 1px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+/*  Range  */
+ui-multi-handle .range {
+    display: flex;
+    position: absolute;
+    left: 0;
+    transition: 150ms linear;
+    background-color: #f44336;
+    height: 2px;
+}
+
+ui-multi-handle .range.disabled {
+    background-color: #bdbdbd;
+}
+
+ui-multi-handle .start, ui-multi-handle .end {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #f44336;
+    color: #FFF;
+    position: absolute;
+    transition: 300ms ease-in-out;
+    display: flex;
+    margin-top: -6px;
+}
+
+ui-multi-handle .range.disabled > div {
+    width: 10px;
+    height: 10px;
+    margin-top: -4px;
+    background-color: #bdbdbd;
+}
+
+ui-multi-handle .range > div::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: rotate(90deg) scale(0);
+    z-index: -1;
+    border-top: 13px solid transparent;
+    border-bottom: 13px solid transparent;
+    border-left: 14px solid #F44336;
+    transition: all 200ms ease-in-out;
+}
+
+ui-multi-handle .range > div.active::before {
+    transform: rotate(90deg) scale(1);
+    bottom: -24px;
+    transition: all 200ms 100ms ease-in-out;
+}
+
+ui-multi-handle .range > div::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background-color: transparent;
+}
+
+
+ui-multi-handle .start {
+    left: 0;
+    transform: translateX(-50%);
+}
+
+ui-multi-handle .range > div.active {
+    transform: translate(-50%, -80%);
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    margin-top: -16px;
+}
+
+ui-multi-handle .range .end.active {
+    transform: translate(50%, -80%);
+}
+
+ui-multi-handle .end {
+    right: 0;
+    transform: translateX(50%);
+}
+
+ui-multi-handle .value {
+    font-size: 11px;
+    white-space: nowrap;
+    margin: auto;
+    transition: all 100ms ease-in-out;
+}
+
+ui-multi-handle .value.ng-enter {
+    opacity: 0;
+}
+
+ui-multi-handle .value.ng-leave {
+    transition: none;
+}

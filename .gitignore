@@ -1,0 +1,10 @@
+node_modules
+src/*.min.*
+src/smn-ui.*
+**/*.templates.js
+.idea
+
+docs/src/content/lib
+docs/src/index.html
+docs/prod
+docs/dev

@@ -1,0 +1,180 @@
+ui-tree-view,
+ui-tree-view-list,
+ui-tree-view-item {
+    display: block;
+}
+
+ui-tree-view-list {
+    display: flex;
+    transition: 200ms ease-in-out;
+}
+
+ui-tree-view-list ui-tree-view-list > .offset {
+    position: relative;
+    width: 36px;
+    flex: 0 0 auto;
+}
+
+ui-tree-view-item:not(:last-child) > .list-wrap > ui-tree-view-list > .offset::before,
+ui-tree-view-item > .option-wrap:not(.submenu) > .icon-wrap::before,
+ui-tree-view-item > .option-wrap:not(.submenu) > .icon-wrap::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    transition: 200ms ease-in-out;
+}
+
+ui-tree-view-list > .options {
+    flex: 1 1 auto;
+}
+
+ui-tree-view-item .list-wrap {
+    overflow: hidden;
+}
+
+ui-tree-view-item .option-wrap {
+    min-height: 42px;
+    display: flex;
+    font-size: 14px;
+}
+
+ui-tree-view-item .option-wrap:hover,
+ui-tree-view-list ui-tree-view-list > .offset:hover {
+    /*background-color: rgba(0,0,0,0.12);*/
+    /*cursor: default;*/
+}
+
+ui-tree-view-item .icon-wrap {
+    width: 36px;
+    min-height: 36px;
+}
+
+ui-tree-view-item .icon-wrap,
+ui-tree-view-item .action-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+}
+
+ui-tree-view > ui-tree-view-list > .options > ui-tree-view-item:first-child > .option-wrap .icon-wrap::before {
+    top: 50%;
+}
+
+ui-tree-view-item:last-child > .option-wrap .icon-wrap::before {
+    bottom: 50%;
+}
+
+ui-tree-view-item > .option-wrap:not(.submenu) > .icon-wrap::after {
+    width: initial;
+    height: 1px;
+    left: 50%;
+}
+
+ui-tree-view-item > .option-wrap .name {
+    flex: 1 1 auto;
+    padding: 2px 30px 2px 14px;
+    display: flex;
+    align-items: center;
+    word-break: break-word;
+    cursor: default;
+}
+
+ui-tree-view .icon-wrap button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(0, 0, 0, 0.9);
+    background-color: transparent;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: 200ms ease-in-out;
+}
+
+ui-tree-view .icon-wrap button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+ui-tree-view .icon-wrap button:active {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+ui-tree-view .icon-wrap button {
+    transform: rotate(-90deg);
+}
+
+ui-tree-view .open > .icon-wrap button {
+    transform: rotate(-45deg);
+    color: rgba(3, 169, 244, 0.8);
+}
+
+ui-tree-view .icon-wrap button i {
+    width: 24px;
+    height: 24px;
+}
+
+ui-tree-view .icon-wrap button.ng-enter {
+    opacity: 0;
+}
+
+ui-tree-view .icon-wrap button.ng-enter-active {
+    opacity: 1;
+}
+
+ui-tree-view .icon-wrap button.ng-enter {
+    opacity: 1;
+}
+
+ui-tree-view .icon-wrap button.ng-enter-active {
+    opacity: 0;
+}
+
+.option-wrap:hover + .list-wrap > ui-tree-view-list > .options > ui-tree-view-item > .option-wrap .icon-wrap::after,
+.option-wrap:hover + .list-wrap > ui-tree-view-list > .options > ui-tree-view-item > .option-wrap .icon-wrap::before,
+.option-wrap:hover + .list-wrap > ui-tree-view-list > .options > ui-tree-view-item > .list-wrap > ui-tree-view-list > .offset::before {
+    background-color: rgba(3, 169, 244, 0.8);
+}
+
+ui-tree-view .option-wrap button,
+ui-tree-view .action-wrap button {
+    margin: 3px;
+}
+
+ui-tree-view-item > .option-wrap:hover .action-wrap button {
+    opacity: 1;
+}
+
+ui-tree-view .action-wrap {
+    position: relative;
+}
+
+ui-tree-view .action-wrap button {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+ui-tree-view .action-wrap button.ng-enter {
+    opacity: 0;
+}
+
+ui-tree-view .action-wrap button.ng-enter-active {
+    opacity: 1;
+}
+
+ui-tree-view .action-wrap button.ng-leave {
+    opacity: 1;
+}
+
+ui-tree-view .action-wrap button.ng-leave-active {
+    opacity: 0;
+}

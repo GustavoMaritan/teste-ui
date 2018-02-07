@@ -1,0 +1,25 @@
+<ui-chip ng-repeat="$chip in $ctrl.ngModel"
+         ng-keydown="$ctrl.chipKeyAction($event, $index)"></ui-chip>
+<input type="text"
+       ng-model="$ctrl.searchQuery"
+       ng-focus="$ctrl.showItems()"
+       ng-blur="$ctrl.hideItems()"
+       ng-change="$ctrl.checkFilteredItems($ctrl.uiItemsFiltered)"
+       ng-keydown="$ctrl.inputKeyAction($event)"
+       ng-attr-placeholder="{{($ctrl.ngModel.length ? $ctrl.secondaryPlaceholder : '') || $ctrl.placeholder }}">
+<ui-card class="ui-chip-autocomplete" ng-if="$ctrl.uiItems && $ctrl.itemsShown"
+         tabindex="-1"
+         ng-focus="$ctrl.showItems()"
+         ng-blur="$ctrl.hideItems()"
+         style="position: absolute; top: 100%; left: 0; right: 0; z-index: 1;">
+    <ul class="ui-list s-l1 s-dense clickable">
+        <li ng-repeat="item in $ctrl.uiItemsFiltered = ($ctrl.uiItems | uiFilterBy:$ctrl.searchQuery:[$ctrl.uiPrimaryInfo] | filter:$ctrl.filterRemoveSelected | limitTo: $ctrl.uiLimit) track by (ctrl.uiTrackBy || $index)">
+            <div class="item-cover blue"
+                 ng-click="$ctrl.selectItem(item)"
+                 ng-class="{'focused': $ctrl.focusedIndex === $index}">
+                <div class="list-text"
+                     ng-bind="$ctrl.uiPrimaryInfo ? item[$ctrl.uiPrimaryInfo] : item"></div>
+            </div>
+        </li>
+    </ul>
+</ui-card>

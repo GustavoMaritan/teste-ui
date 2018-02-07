@@ -1,0 +1,23 @@
+<div class="bar">
+    <div class="ui-flex wrap" ng-class="{'stretch': vm.stretch}">
+        <button class="ui-button primary"
+                type="button"
+                ng-repeat="tab in vm.tabs"
+                ng-click="vm.openTab(tab)"
+                ng-class="{'active': tab.index === vm.tabActive.index, 'icon': tab.icon, 'ui-ellipsis': vm.stretch}">
+            <i class="material-icons" ng-if="tab.icon">{{tab.icon}}</i> {{tab.name}}
+        </button>
+        <indicator></indicator>
+    </div>
+    <div class="scroll-helper" ng-if="!vm.stretch">
+        <div class="left" ng-if="vm.showLeft" ng-click="vm.tabsGoLeft()">
+            <i class="material-icons">keyboard_arrow_left</i>
+        </div>
+        <div class="right" ng-if="vm.showRight" ng-click="vm.tabsGoRight()">
+            <i class="material-icons">keyboard_arrow_right</i>
+        </div>
+    </div>
+</div>
+<div style="overflow: hidden">
+    <div ng-transclude class="content ui-flex"></div>
+</div>

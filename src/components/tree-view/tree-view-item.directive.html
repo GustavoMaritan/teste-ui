@@ -1,0 +1,11 @@
+<div class="option-wrap" ng-class="{'submenu': option[config.submenu].length, 'open': option.open}">
+	<div class="icon-wrap">
+		<button ng-if="option[config.submenu].length" ng-click="open(option, $event)">
+			<i class="material-icons">arrow_drop_down</i>
+		</button>
+	</div>
+	<div class="name" ng-bind="option[config.name]" ng-click="open(option, $event, true)"></div>
+</div>
+<div class="list-wrap">
+	<ui-tree-view-list class="drawer-slide-vertical keep-opacity" list="option[config.submenu]" ng-show="option.open"></ui-tree-view-list>
+</div>
