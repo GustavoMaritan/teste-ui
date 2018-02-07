@@ -1,0 +1,27 @@
+<div>
+    <div class="ui-icon" ng-style="{'width': uiShape == 'round-rectangle' && 'auto'}">
+        <div class="switch-color-preview ui-color{{uiShape && ' ' + uiShape}}" ng-class="{'no-color': !colorSelected}" ng-style="{'background-color': colorSelected ? colorSelected : '#D01716'}" data-color-range="300"></div>
+    </div>
+    <ui-input-container class="no-margin">
+        <input type="text"
+               ng-class="uiClass"
+               name="{{uiName}}"
+               ng-readonly="switchOpened"
+               ng-pattern="/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/"
+               class="txt-color-switch"
+               ng-model="ngModel"
+               ng-focus="switchOpen()"
+               style="user-select: none"
+               autocomplete="off"
+               ng-style="{'color': uiShape == 'round-rectangle' && 'transparent'}">
+        <label>Cor</label>
+    </ui-input-container>
+    <div class="switch-color" ng-if="switchOpened">
+        <div class="no-color" ng-click="setColorType(null)"></div>
+        <div ng-repeat="colorType in colorTypes" ng-class="colorClass('bg-' + colorType + '-500')" ng-click="setColorType($event, colorType)"></div>
+        <div class="switch-var" ng-class="{'ui-show':colorTypeSelected}" ng-style="{'top': switchVarTop}" style="top: -47px;">
+            <div class="ui-color {{colorTypeSelected != null ? 'bg-' + colorTypeSelected + '-' + colorVariation : ''}}" ng-repeat="colorVariation in colorVariations" ng-class="{'ui-show':checkAccentColor(colorVariation)}" data-color-range="{{colorVariation}}" ng-click="selectColor($event)"></div>
+            <div class="arrow" ng-style="{'margin-left': switchVarArrowLeft}" style="margin-left: 57px;"></div>
+        </div>
+    </div>
+</div>

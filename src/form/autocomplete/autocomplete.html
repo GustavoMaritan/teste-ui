@@ -1,0 +1,33 @@
+<ui-input-container>
+    <input type="text"
+           ng-model="$ctrl.searchQuery"
+           ng-focus="$ctrl.blur($ctrl.searchQuery); $ctrl.uiFocus()"
+           ng-blur="$ctrl.hideItems(); $ctrl.uiBlur()"
+           ng-change="$ctrl.searchItem($ctrl.searchQuery); $ctrl.uiChange()"
+           ng-keydown="$ctrl.inputKeyAction($event)"
+           ng-disabled="$ctrl.uiDisabled"
+           ng-attr-placeholder="{{$ctrl.placeholder}}">
+    <label class="keep-float" ng-bind="$ctrl.uiLabel"></label>
+</ui-input-container>
+<ui-card class="ui-autocomplete-suggestions" ng-if="$ctrl.uiItems && $ctrl.itemsShown"
+         tabindex="-1"
+         ng-focus="$ctrl.showItems()"
+         ng-blur="$ctrl.hideItems()">
+    <ul class="ui-list s-l1 s-dense ">
+        <li class="clickable" ng-repeat="item in $ctrl.uiItemsFiltered = $ctrl.uiItems track by (ctrl.uiTrackBy || $index)">
+            <div class="item-cover blue"
+                 ng-click="$ctrl.selectItem(item)"
+                 ng-class="{'focused': $ctrl.focusedIndex === $index}">
+                <div class="list-text">
+                    <span ng-bind="$ctrl.uiPrimaryInfo ? item[$ctrl.uiPrimaryInfo] : item"></span>
+                    <div  class="ui-secondary" ng-if="$ctrl.uiSecondaryInfo" ng-bind="$ctrl.uiSecondaryInfo ? item[$ctrl.uiSecondaryInfo] : item"></div>
+                </div>
+            </div>
+        </li>
+        <li ng-if="!$ctrl.uiItems.length">
+            <div class="item-cover">
+                <div class="list-text ui-ellipsis">Nenhum resultado encontrado para "{{$ctrl.searchQuery}}"</div>
+            </div>
+        </li>
+    </ul>
+</ui-card>

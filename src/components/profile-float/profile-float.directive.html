@@ -1,0 +1,2 @@
+<div ng-if="!src" ng-transclude></div>
+<img ng-src="{{src}}" ng-if="src" ng-style="{'max-width': !higherWidth ? '100%' : '', 'max-height': higherWidth ? '100%' : ''}">

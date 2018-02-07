@@ -1,0 +1,136 @@
+ui-tabs {
+    display: block;
+    position: relative;
+}
+
+ui-tabs > .bar {
+    overflow: hidden;
+    height: 48px;
+    border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+ui-tabs .wrap {
+    padding-left: 48px;
+    position: relative;
+    overflow: auto;
+}
+
+ui-tabs.center .wrap {
+    padding-left: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+ui-tabs > .bar .stretch .ui-button{
+    flex: 1;
+    min-width: 0;
+}
+
+ui-tabs > .bar .ui-button {
+    padding-left: 12px;
+    padding-right: 12px;
+    max-width: 246px;
+    min-width: 160px;
+    height: 48px;
+    border-radius: 0;
+    flex: 0;
+}
+
+ui-tabs > .bar .ui-button.icon {
+    /*max-width: 48px;*/
+    /*min-width: 48px;*/
+}
+
+ui-tabs > .bar .ui-button:not(.active) {
+    color: rgba(33, 150, 243, 0.7);
+}
+
+ui-tabs indicator {
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    background-color: #2196f3;
+    transition: all 300ms ease-in-out;
+}
+
+ui-tabs .content {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    transition: all 300ms ease-in-out;
+}
+
+ui-tab {
+    min-width: 100%;
+    position: relative;
+}
+
+ui-tab > div {
+    /*transition: all 500ms 500ms ease-in-out;*/
+}
+
+ui-tab .deactive {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+@media (max-width: 600px) {
+    ui-tabs .wrap {
+        padding-left: 0;
+    }
+
+    /*ui-tabs > .bar .ui-button {*/
+        /*min-width: 0;*/
+        /*flex: 1;*/
+    /*}*/
+}
+
+
+
+ui-tabs .scroll-helper {
+    position: absolute;
+    height: 48px;
+    overflow: hidden;
+    width: 100%;
+    pointer-events: none;
+    left: 0;
+    top: 0;
+}
+
+ui-tabs .scroll-helper .right,
+ui-tabs .scroll-helper .left {
+    background-color: inherit;
+    position: absolute;
+    height: 48px;
+    color: inherit;
+    /*padding-top: 11px;*/
+    width: 50px;
+    text-align: center;
+    /*opacity: 0;*/
+    padding-top: 12px;
+    pointer-events: auto;
+    cursor: pointer;
+
+    transition: opacity 200ms ease-in-out;
+}
+
+ui-tabs .scroll-helper .left.ng-enter,
+ui-tabs .scroll-helper .right.ng-enter {
+    opacity: 0;
+}
+
+ui-tabs .scroll-helper .right {
+    /*box-shadow: -6px 0 12px 0 #263238;*/
+    right: 0;
+}
+
+ui-tabs .scroll-helper .left {
+    /*box-shadow: 6px 0 12px 0 #263238;*/
+    left: 0;
+}
+
+ui-tabs .scroll-helper .show {
+    opacity: 1;
+}

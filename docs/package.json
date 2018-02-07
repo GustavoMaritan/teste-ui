@@ -1,0 +1,59 @@
+{
+  "name": "smn-ui",
+  "version": "1.2.0",
+  "description": "Pacote de componentes de interface desenvolvidos com AngularJS e Material Design",
+  "scripts": {
+    "server": "node server.js src",
+    "start": "gulp & node server.js src",
+    "prod": "gulp build --prod & node server.js prod",
+    "dev": "gulp build --dev & node server.js dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smn-official/smn-ui.git"
+  },
+  "authors": [
+    "Mario Santos <mariocsants@gmail.com>",
+    "Ítalo Andrade <andraditalo@gmail.com>",
+    "Claudanilo Xavier <claudaniloxavier@gmail.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/smn-official/smn-ui/issues"
+  },
+  "homepage": "https://github.com/smn-official/smn-ui#readme",
+  "dependencies": {
+    "bower": "^1.7.9",
+    "cluster": "^0.7.7",
+    "compression": "^1.6.2",
+    "debug": "~0.7.4",
+    "express": "~4.0.0",
+    "fs": "0.0.2",
+    "gulp-rename": "^1.2.2"
+  },
+  "devDependencies": {
+    "event-stream": "^3.3.3",
+    "gulp": "^3.9.1",
+    "gulp-angular-filesort": "^1.1.1",
+    "gulp-angular-templatecache": "^1.8.0",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-clean": "^0.3.2",
+    "gulp-clean-css": "^2.0.7",
+    "gulp-concat": "^2.6.0",
+    "gulp-concat-css": "^2.2.0",
+    "gulp-htmlmin": "^2.0.0",
+    "gulp-if": "^2.0.2",
+    "gulp-imagemin": "^3.0.1",
+    "gulp-inject": "^4.0.0",
+    "gulp-load-plugins": "^1.4.0",
+    "gulp-ng-annotate": "^2.0.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-preprocess": "^2.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.7",
+    "pretty-hrtime": "^1.0.3",
+    "run-sequence": "^1.1.5",
+    "stream-series": "^0.1.1"
+  }
+}
