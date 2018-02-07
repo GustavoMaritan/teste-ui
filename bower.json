@@ -2,7 +2,7 @@
     "name": "test-pack-ui",
     "version": "1.0.0",
     "ignore": [
-        "*",
+        "/*",
         "!dist"
     ]
 }
