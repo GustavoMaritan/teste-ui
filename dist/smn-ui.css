@@ -5675,36 +5675,6 @@ ui-tree-view .action-wrap button.ng-leave {
 ui-tree-view .action-wrap button.ng-leave-active {
   opacity: 0;
 }
-ui-autocomplete {
-  cursor: text;
-  position: relative;
-  display: block;
-}
-
-ui-autocomplete .ui-autocomplete-suggestions {
-  max-height: 20vh;
-  overflow: auto;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 1;
-}
-
-ui-autocomplete .ui-autocomplete-suggestions.ng-enter {
-  opacity: 0;
-  transition: none;
-  max-height: 0;
-}
-
-ui-autocomplete .ui-autocomplete-suggestions.ng-leave {
-  transition: 300ms ease-in-out;
-}
-
-ui-autocomplete .ui-autocomplete-suggestions.ng-leave {
-  opacity: 0;
-  max-height: 0;
-}
 .ui-button-cover {
   display: -webkit-box;
   display: flex;
@@ -6165,6 +6135,36 @@ ui-autocomplete .ui-autocomplete-suggestions.ng-leave {
     margin-left: 0;
     margin-right: 0;
   }
+}
+ui-autocomplete {
+  cursor: text;
+  position: relative;
+  display: block;
+}
+
+ui-autocomplete .ui-autocomplete-suggestions {
+  max-height: 20vh;
+  overflow: auto;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+ui-autocomplete .ui-autocomplete-suggestions.ng-enter {
+  opacity: 0;
+  transition: none;
+  max-height: 0;
+}
+
+ui-autocomplete .ui-autocomplete-suggestions.ng-leave {
+  transition: 300ms ease-in-out;
+}
+
+ui-autocomplete .ui-autocomplete-suggestions.ng-leave {
+  opacity: 0;
+  max-height: 0;
 }
 ui-chips {
   cursor: text;

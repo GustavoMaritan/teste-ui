@@ -441,6 +441,96 @@
 (function () {
     'use strict';
 
+    uiMaskCpf.$inject = ["uiCpfFilter"];
+    angular.module('smn-ui').directive('uiMaskCpf', uiMaskCpf);
+
+    function uiMaskCpf(uiCpfFilter) {
+        var directive = {
+            restrict: 'A',
+            link: link,
+            require: 'ngModel'
+        };
+        return directive;
+
+        function link(scope, element, attrs, ctrl) {
+            ctrl.$parsers.push(function (value) {
+                var viewValue = uiCpfFilter(value);
+                ctrl.$setValidity('cpf', isValidCpf(viewValue));
+                ctrl.$setViewValue(viewValue);
+                ctrl.$render();
+                if (viewValue.length === 14) return viewValue.replace(/[^0-9]+/g, '');
+                if (!viewValue) return '';
+            });
+
+            ctrl.$formatters.push(function (value) {
+                value = typeof value == 'number' ? value.toString() : value;
+                if (value) value = ("00000000000" + value).substring(11 + value.length - 11);
+                return uiCpfFilter(value);
+            });
+
+            function isValidCpf(cpf) {
+                if (!cpf) return true;
+
+                if (cpf.length >= 14) {
+                    var valid = true;
+
+                    cpf = cpf.replace(/[^\d]+/g, '');
+
+                    if (cpf.length != 11) valid = false;
+
+                    var sum;
+                    var rest;
+                    sum = 0;
+                    if (cpf == "00000000000" || cpf == "11111111111" || cpf == "22222222222" || cpf == "33333333333" || cpf == "44444444444" || cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" || cpf == "88888888888" || cpf == "99999999999") valid = false;
+
+                    for (var i = 1; i <= 9; i++) {
+                        sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+                    }rest = sum * 10 % 11;
+
+                    if (rest == 10 || rest == 11) rest = 0;
+                    if (rest != parseInt(cpf.substring(9, 10))) valid = false;
+
+                    sum = 0;
+                    for (var i = 1; i <= 10; i++) {
+                        sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+                    }rest = sum * 10 % 11;
+
+                    if (rest == 10 || rest == 11) rest = 0;
+                    if (rest != parseInt(cpf.substring(10, 11))) valid = false;
+
+                    if (!valid) return false;
+                }
+                return true;
+            }
+        }
+    }
+})();
+'use strict';
+
+(function () {
+    'use strict';
+
+    angular.module('smn-ui').filter('uiCpf', uiCpf);
+
+    function uiCpf() {
+        return uiCpfFilter;
+
+        function uiCpfFilter(cpf) {
+            if (!cpf) return '';
+            cpf = cpf.toString().replace(/[^0-9]+/g, '');
+            if (cpf.length > 3) cpf = cpf.substring(0, 3) + '.' + cpf.substring(3);
+            if (cpf.length > 7) cpf = cpf.substring(0, 7) + '.' + cpf.substring(7);
+            if (cpf.length > 11) cpf = cpf.substring(0, 11) + '-' + cpf.substring(11);
+            if (cpf.length > 14) cpf = cpf.substring(0, 14);
+            return cpf;
+        }
+    }
+})();
+'use strict';
+
+(function () {
+    'use strict';
+
     angular.module('smn-ui').service('uiCurrencyMaskUtils', uiCurrencyMaskUtils);
 
     function uiCurrencyMaskUtils() {
@@ -662,96 +752,6 @@
                 newCurrency = currencyChar + newCurrency;
             }
             return newCurrency;
-        }
-    }
-})();
-'use strict';
-
-(function () {
-    'use strict';
-
-    uiMaskCpf.$inject = ["uiCpfFilter"];
-    angular.module('smn-ui').directive('uiMaskCpf', uiMaskCpf);
-
-    function uiMaskCpf(uiCpfFilter) {
-        var directive = {
-            restrict: 'A',
-            link: link,
-            require: 'ngModel'
-        };
-        return directive;
-
-        function link(scope, element, attrs, ctrl) {
-            ctrl.$parsers.push(function (value) {
-                var viewValue = uiCpfFilter(value);
-                ctrl.$setValidity('cpf', isValidCpf(viewValue));
-                ctrl.$setViewValue(viewValue);
-                ctrl.$render();
-                if (viewValue.length === 14) return viewValue.replace(/[^0-9]+/g, '');
-                if (!viewValue) return '';
-            });
-
-            ctrl.$formatters.push(function (value) {
-                value = typeof value == 'number' ? value.toString() : value;
-                if (value) value = ("00000000000" + value).substring(11 + value.length - 11);
-                return uiCpfFilter(value);
-            });
-
-            function isValidCpf(cpf) {
-                if (!cpf) return true;
-
-                if (cpf.length >= 14) {
-                    var valid = true;
-
-                    cpf = cpf.replace(/[^\d]+/g, '');
-
-                    if (cpf.length != 11) valid = false;
-
-                    var sum;
-                    var rest;
-                    sum = 0;
-                    if (cpf == "00000000000" || cpf == "11111111111" || cpf == "22222222222" || cpf == "33333333333" || cpf == "44444444444" || cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" || cpf == "88888888888" || cpf == "99999999999") valid = false;
-
-                    for (var i = 1; i <= 9; i++) {
-                        sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
-                    }rest = sum * 10 % 11;
-
-                    if (rest == 10 || rest == 11) rest = 0;
-                    if (rest != parseInt(cpf.substring(9, 10))) valid = false;
-
-                    sum = 0;
-                    for (var i = 1; i <= 10; i++) {
-                        sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
-                    }rest = sum * 10 % 11;
-
-                    if (rest == 10 || rest == 11) rest = 0;
-                    if (rest != parseInt(cpf.substring(10, 11))) valid = false;
-
-                    if (!valid) return false;
-                }
-                return true;
-            }
-        }
-    }
-})();
-'use strict';
-
-(function () {
-    'use strict';
-
-    angular.module('smn-ui').filter('uiCpf', uiCpf);
-
-    function uiCpf() {
-        return uiCpfFilter;
-
-        function uiCpfFilter(cpf) {
-            if (!cpf) return '';
-            cpf = cpf.toString().replace(/[^0-9]+/g, '');
-            if (cpf.length > 3) cpf = cpf.substring(0, 3) + '.' + cpf.substring(3);
-            if (cpf.length > 7) cpf = cpf.substring(0, 7) + '.' + cpf.substring(7);
-            if (cpf.length > 11) cpf = cpf.substring(0, 11) + '-' + cpf.substring(11);
-            if (cpf.length > 14) cpf = cpf.substring(0, 14);
-            return cpf;
         }
     }
 })();
@@ -1030,6 +1030,134 @@
 (function () {
     'use strict';
 
+    uiDatepicker.$inject = ["$compile", "$timeout", "$animate", "$interpolate"];
+    angular.module('smn-ui').directive('uiDatepicker', uiDatepicker);
+
+    function uiDatepicker($compile, $timeout, $animate, $interpolate) {
+        var directive = {
+            require: 'ngModel',
+            link: link,
+            restrict: 'A',
+            scope: {
+                ngModel: '=',
+                uiDateFormat: '@?',
+                uiDatepicker: '@?',
+                uiSelect: '&?',
+                uiMinDate: '=?',
+                uiMaxDate: '=?',
+                ngReadonly: '=?',
+                uiViewDate: '=?'
+            }
+        };
+        return directive;
+
+        function link(scope, element, attrs, ctrl) {
+            var picker,
+                mask,
+                pickerGroup,
+                fromEnter,
+                toEnter,
+                target = scope.uiDatepicker ? angular.element(scope.uiDatepicker) : element;
+
+            element.on(attrs.uiPickerEvent || 'focus', function (e) {
+                renderPicker(target);
+            });
+
+            scope.closePicker = closePicker;
+            scope.select = select;
+
+            function renderPicker(target) {
+                pickerGroup = $compile('<ui-background-mask class="ui-picker-mask" ng-mousedown="closePicker($event)"></ui-background-mask>' + '<ui-calendar class="ui-picker" ' + 'tabindex="0" ' + 'ui-select="select($date)" ' + 'ui-cancel="closePicker()" ' + 'ui-view-date="uiViewDate" ' + 'ui-min-date="uiMinDate" ' + 'ui-max-date="uiMaxDate" ' + 'ui-view-date="ngModel" ' + ('uiInitOnSelected' in attrs ? 'ui-init-on-selected ' : '') + 'ng-model="ngModel"></ui-calendar>')(scope);
+                var inputOffset = target.offset(),
+                    padding = 16;
+
+                angular.element('body').append(pickerGroup);
+                mask = angular.element(pickerGroup[0]);
+                picker = angular.element(pickerGroup[1]);
+
+                $timeout(function () {
+                    var pickerSize = {
+                        height: picker[0].scrollHeight,
+                        width: picker[0].clientWidth
+                    };
+
+                    var correctionMatrix = {
+                        x: 0,
+                        y: 0
+                    };
+
+                    var pickerHorizontalCoveringArea = inputOffset.left + picker[0].clientWidth + padding + (!scope.ngReadonly ? target[0].clientHeight : 0),
+                        pickerVerticalCoveringArea = inputOffset.top + picker[0].clientHeight + padding + (!scope.ngReadonly ? target[0].clientHeight : 0);
+
+                    if (pickerHorizontalCoveringArea > window.innerWidth + document.body.scrollTop) correctionMatrix.x = window.innerWidth + document.body.scrollTop - pickerHorizontalCoveringArea;
+                    if (pickerVerticalCoveringArea > window.innerHeight + document.body.scrollTop) correctionMatrix.y = window.innerHeight + document.body.scrollTop - pickerVerticalCoveringArea;
+
+                    fromEnter = {
+                        top: inputOffset.top + (!scope.ngReadonly ? target[0].clientHeight : 0),
+                        left: inputOffset.left,
+                        opacity: 0,
+                        transform: 'scale(0) translate(0px, 0px)'
+                    };
+                    toEnter = {
+                        top: inputOffset.top + (!scope.ngReadonly ? target[0].clientHeight : 0),
+                        left: inputOffset.left,
+                        opacity: 1,
+                        transform: 'scale(1) ' + $interpolate('translate({{x}}px, {{y}}px)')({ x: correctionMatrix.x, y: correctionMatrix.y })
+                    };
+                    $animate.enter(picker, document.body, angular.element('body > *:last-child'), {
+                        from: fromEnter,
+                        to: toEnter
+                    }).then(function () {
+                        picker.css({ height: '', width: '' });
+                        picker.find('.label').focus();
+                    });
+                });
+
+                var checkTimeout;
+                picker.on('focus', 'button', function (e) {
+                    $timeout.cancel(checkTimeout);
+                });
+                picker.on('mousedown click mouseup', function (e) {
+                    $timeout.cancel(checkTimeout);
+                });
+                picker.on('keydown', function (e) {
+                    if (e.keyCode === 27) scope.closePicker();
+                });
+                picker.on('focusout', 'button', function (e) {
+                    checkTimeout = $timeout(function () {
+                        scope.closePicker();
+                        element.focus();
+                    });
+                });
+            }
+
+            function select($date) {
+                scope.uiSelect && scope.uiSelect({ $date: $date });
+                closePicker();
+            };
+
+            function closePicker(event) {
+                $animate.leave(mask);
+                toEnter.height = picker[0].scrollHeight;
+                $animate.leave(picker, {
+                    from: toEnter,
+                    to: fromEnter
+                }).then(function () {
+                    element.focus();
+                });
+                if (event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                }
+            };
+        }
+    }
+})();
+'use strict';
+
+(function () {
+    'use strict';
+
     angular.module('smn-ui').directive('uiInputFile', uiInputFile);
 
     uiInputFile.$inject = ['$compile'];
@@ -1192,134 +1320,6 @@
                 };
                 reader.readAsDataURL(file);
             }
-        }
-    }
-})();
-'use strict';
-
-(function () {
-    'use strict';
-
-    uiDatepicker.$inject = ["$compile", "$timeout", "$animate", "$interpolate"];
-    angular.module('smn-ui').directive('uiDatepicker', uiDatepicker);
-
-    function uiDatepicker($compile, $timeout, $animate, $interpolate) {
-        var directive = {
-            require: 'ngModel',
-            link: link,
-            restrict: 'A',
-            scope: {
-                ngModel: '=',
-                uiDateFormat: '@?',
-                uiDatepicker: '@?',
-                uiSelect: '&?',
-                uiMinDate: '=?',
-                uiMaxDate: '=?',
-                ngReadonly: '=?',
-                uiViewDate: '=?'
-            }
-        };
-        return directive;
-
-        function link(scope, element, attrs, ctrl) {
-            var picker,
-                mask,
-                pickerGroup,
-                fromEnter,
-                toEnter,
-                target = scope.uiDatepicker ? angular.element(scope.uiDatepicker) : element;
-
-            element.on(attrs.uiPickerEvent || 'focus', function (e) {
-                renderPicker(target);
-            });
-
-            scope.closePicker = closePicker;
-            scope.select = select;
-
-            function renderPicker(target) {
-                pickerGroup = $compile('<ui-background-mask class="ui-picker-mask" ng-mousedown="closePicker($event)"></ui-background-mask>' + '<ui-calendar class="ui-picker" ' + 'tabindex="0" ' + 'ui-select="select($date)" ' + 'ui-cancel="closePicker()" ' + 'ui-view-date="uiViewDate" ' + 'ui-min-date="uiMinDate" ' + 'ui-max-date="uiMaxDate" ' + 'ui-view-date="ngModel" ' + ('uiInitOnSelected' in attrs ? 'ui-init-on-selected ' : '') + 'ng-model="ngModel"></ui-calendar>')(scope);
-                var inputOffset = target.offset(),
-                    padding = 16;
-
-                angular.element('body').append(pickerGroup);
-                mask = angular.element(pickerGroup[0]);
-                picker = angular.element(pickerGroup[1]);
-
-                $timeout(function () {
-                    var pickerSize = {
-                        height: picker[0].scrollHeight,
-                        width: picker[0].clientWidth
-                    };
-
-                    var correctionMatrix = {
-                        x: 0,
-                        y: 0
-                    };
-
-                    var pickerHorizontalCoveringArea = inputOffset.left + picker[0].clientWidth + padding + (!scope.ngReadonly ? target[0].clientHeight : 0),
-                        pickerVerticalCoveringArea = inputOffset.top + picker[0].clientHeight + padding + (!scope.ngReadonly ? target[0].clientHeight : 0);
-
-                    if (pickerHorizontalCoveringArea > window.innerWidth + document.body.scrollTop) correctionMatrix.x = window.innerWidth + document.body.scrollTop - pickerHorizontalCoveringArea;
-                    if (pickerVerticalCoveringArea > window.innerHeight + document.body.scrollTop) correctionMatrix.y = window.innerHeight + document.body.scrollTop - pickerVerticalCoveringArea;
-
-                    fromEnter = {
-                        top: inputOffset.top + (!scope.ngReadonly ? target[0].clientHeight : 0),
-                        left: inputOffset.left,
-                        opacity: 0,
-                        transform: 'scale(0) translate(0px, 0px)'
-                    };
-                    toEnter = {
-                        top: inputOffset.top + (!scope.ngReadonly ? target[0].clientHeight : 0),
-                        left: inputOffset.left,
-                        opacity: 1,
-                        transform: 'scale(1) ' + $interpolate('translate({{x}}px, {{y}}px)')({ x: correctionMatrix.x, y: correctionMatrix.y })
-                    };
-                    $animate.enter(picker, document.body, angular.element('body > *:last-child'), {
-                        from: fromEnter,
-                        to: toEnter
-                    }).then(function () {
-                        picker.css({ height: '', width: '' });
-                        picker.find('.label').focus();
-                    });
-                });
-
-                var checkTimeout;
-                picker.on('focus', 'button', function (e) {
-                    $timeout.cancel(checkTimeout);
-                });
-                picker.on('mousedown click mouseup', function (e) {
-                    $timeout.cancel(checkTimeout);
-                });
-                picker.on('keydown', function (e) {
-                    if (e.keyCode === 27) scope.closePicker();
-                });
-                picker.on('focusout', 'button', function (e) {
-                    checkTimeout = $timeout(function () {
-                        scope.closePicker();
-                        element.focus();
-                    });
-                });
-            }
-
-            function select($date) {
-                scope.uiSelect && scope.uiSelect({ $date: $date });
-                closePicker();
-            };
-
-            function closePicker(event) {
-                $animate.leave(mask);
-                toEnter.height = picker[0].scrollHeight;
-                $animate.leave(picker, {
-                    from: toEnter,
-                    to: fromEnter
-                }).then(function () {
-                    element.focus();
-                });
-                if (event) {
-                    event.stopPropagation();
-                    event.preventDefault();
-                }
-            };
         }
     }
 })();
@@ -1550,47 +1550,6 @@
 (function () {
     'use strict';
 
-    angular.module('smn-ui').directive('uiMaxlength', uiMaxLength);
-
-    function uiMaxLength() {
-        var directive = {
-            restrict: 'A',
-            link: link,
-            require: ['ngModel', '?^form'],
-            scope: {
-                uiMaxlength: '='
-            }
-        };
-        return directive;
-
-        function link(scope, element, attrs, ctrl) {
-            scope.$watch('uiMaxlength', function (value, oldValue) {
-                element.attr('maxlength', value);
-            });
-            // ctrl[0].$formatters.unshift(formatValue);
-            // ctrl[0].$parsers.unshift(formatValue);
-            function formatValue(value) {
-                if (!value || !scope.uiMaxLength) return value;
-                var newValue = value.toString();
-                var maxLength = parseInt(scope.uiMaxLength);
-                if (isNaN(maxLength)) return;
-                newValue = newValue.substring(0, maxLength);
-                var isModelPristine = ctrl[0].$pristine,
-                    isFormPristine = ctrl[1] ? ctrl[1].$pristine : false;
-                ctrl[0].$setViewValue(newValue);
-                ctrl[0].$render();
-                isModelPristine && ctrl[0].$setPristine();
-                isFormPristine && ctrl[1].$setPristine();
-                return newValue;
-            }
-        }
-    }
-})();
-'use strict';
-
-(function () {
-    'use strict';
-
     angular.module('smn-ui').filter('uiMinute', uiMinute);
 
     function uiMinute() {
@@ -1636,6 +1595,47 @@
 
             function formatValue(value) {
                 return uiMinuteFilter(value);
+            }
+        }
+    }
+})();
+'use strict';
+
+(function () {
+    'use strict';
+
+    angular.module('smn-ui').directive('uiMaxlength', uiMaxLength);
+
+    function uiMaxLength() {
+        var directive = {
+            restrict: 'A',
+            link: link,
+            require: ['ngModel', '?^form'],
+            scope: {
+                uiMaxlength: '='
+            }
+        };
+        return directive;
+
+        function link(scope, element, attrs, ctrl) {
+            scope.$watch('uiMaxlength', function (value, oldValue) {
+                element.attr('maxlength', value);
+            });
+            // ctrl[0].$formatters.unshift(formatValue);
+            // ctrl[0].$parsers.unshift(formatValue);
+            function formatValue(value) {
+                if (!value || !scope.uiMaxLength) return value;
+                var newValue = value.toString();
+                var maxLength = parseInt(scope.uiMaxLength);
+                if (isNaN(maxLength)) return;
+                newValue = newValue.substring(0, maxLength);
+                var isModelPristine = ctrl[0].$pristine,
+                    isFormPristine = ctrl[1] ? ctrl[1].$pristine : false;
+                ctrl[0].$setViewValue(newValue);
+                ctrl[0].$render();
+                isModelPristine && ctrl[0].$setPristine();
+                isFormPristine && ctrl[1].$setPristine();
+                return newValue;
             }
         }
     }
