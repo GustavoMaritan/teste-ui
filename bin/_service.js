@@ -6,8 +6,7 @@ const fs = require('fs'),
     { exec } = require('child_process'),
     colors = require("colors/safe");
 
-let listDefault = ['blue', 'cyan', 'white', 'gray', 'grey'],
-    versionValue, versionUpdate, commitMessage, listEdit = [];
+let versionValue, versionUpdate, commitMessage;
 
 (async () => {
     versionUpdate = process.argv[2];
@@ -73,15 +72,11 @@ async function npm() {
 // FUNCTIONS
 
 async function prom(command) {
-    if (!listEdit.length) listEdit = listDefault;
-
     return new Promise((resolve, reject) => {
         exec(command, (err, out) => {
             if (err) return reject(err);
-            if (out && out.trim()) {
-                console.log(colors[listEdit[listEdit.length - 1]](out));
-            }
-            listEdit.pop();
+            if (out && out.trim())
+                console.log(colors.blue(out));
             resolve(out);
         })
     });

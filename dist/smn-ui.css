@@ -4057,6 +4057,157 @@ ui-floating-card.ng-leave-active ui-card {
 ui-floating-card ui-card-wrap {
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
+ui-multi-handle {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  position: relative;
+  height: 16px;
+}
+
+ui-multi-handle .range-bar,
+ui-multi-handle .points {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+/*  Range Bar  */
+
+ui-multi-handle .range-bar {
+  background-color: #bdbdbd;
+  height: 2px;
+}
+
+/*  Points  */
+
+ui-multi-handle .points {
+  width: 100%;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+}
+
+ui-multi-handle .point {
+  padding: 1px;
+  border-radius: 50%;
+  background-color: rgba(0,0,0,0.4);
+}
+
+/*  Range  */
+
+ui-multi-handle .range {
+  display: -webkit-box;
+  display: flex;
+  position: absolute;
+  left: 0;
+  transition: 150ms linear;
+  background-color: #f44336;
+  height: 2px;
+}
+
+ui-multi-handle .range.disabled {
+  background-color: #bdbdbd;
+}
+
+ui-multi-handle .start,
+ui-multi-handle .end {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #f44336;
+  color: #FFF;
+  position: absolute;
+  transition: 300ms ease-in-out;
+  display: -webkit-box;
+  display: flex;
+  margin-top: -6px;
+}
+
+ui-multi-handle .range.disabled > div {
+  width: 10px;
+  height: 10px;
+  margin-top: -4px;
+  background-color: #bdbdbd;
+}
+
+ui-multi-handle .range > div::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-transform: rotate(90deg) scale(0);
+  transform: rotate(90deg) scale(0);
+  z-index: -1;
+  border-top: 13px solid transparent;
+  border-bottom: 13px solid transparent;
+  border-left: 14px solid #F44336;
+  transition: all 200ms ease-in-out;
+}
+
+ui-multi-handle .range > div.active::before {
+  -webkit-transform: rotate(90deg) scale(1);
+  transform: rotate(90deg) scale(1);
+  bottom: -24px;
+  transition: all 200ms 100ms ease-in-out;
+}
+
+ui-multi-handle .range > div::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background-color: transparent;
+}
+
+ui-multi-handle .start {
+  left: 0;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+ui-multi-handle .range > div.active {
+  -webkit-transform: translate(-50%, -80%);
+  transform: translate(-50%, -80%);
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  margin-top: -16px;
+}
+
+ui-multi-handle .range .end.active {
+  -webkit-transform: translate(50%, -80%);
+  transform: translate(50%, -80%);
+}
+
+ui-multi-handle .end {
+  right: 0;
+  -webkit-transform: translateX(50%);
+  transform: translateX(50%);
+}
+
+ui-multi-handle .value {
+  font-size: 11px;
+  white-space: nowrap;
+  margin: auto;
+  transition: all 100ms ease-in-out;
+}
+
+ui-multi-handle .value.ng-enter {
+  opacity: 0;
+}
+
+ui-multi-handle .value.ng-leave {
+  transition: none;
+}
 .ui-list {
   list-style-type: none;
 }
@@ -4553,157 +4704,6 @@ ui-floating-card ui-card-wrap {
     font-size: 13px;
     min-height: 60px;
   }
-}
-ui-multi-handle {
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-align: center;
-  align-items: center;
-  position: relative;
-  height: 16px;
-}
-
-ui-multi-handle .range-bar,
-ui-multi-handle .points {
-  position: absolute;
-  left: 0;
-  right: 0;
-}
-
-/*  Range Bar  */
-
-ui-multi-handle .range-bar {
-  background-color: #bdbdbd;
-  height: 2px;
-}
-
-/*  Points  */
-
-ui-multi-handle .points {
-  width: 100%;
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-align: center;
-  align-items: center;
-  -webkit-box-pack: justify;
-  justify-content: space-between;
-}
-
-ui-multi-handle .point {
-  padding: 1px;
-  border-radius: 50%;
-  background-color: rgba(0,0,0,0.4);
-}
-
-/*  Range  */
-
-ui-multi-handle .range {
-  display: -webkit-box;
-  display: flex;
-  position: absolute;
-  left: 0;
-  transition: 150ms linear;
-  background-color: #f44336;
-  height: 2px;
-}
-
-ui-multi-handle .range.disabled {
-  background-color: #bdbdbd;
-}
-
-ui-multi-handle .start,
-ui-multi-handle .end {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background-color: #f44336;
-  color: #FFF;
-  position: absolute;
-  transition: 300ms ease-in-out;
-  display: -webkit-box;
-  display: flex;
-  margin-top: -6px;
-}
-
-ui-multi-handle .range.disabled > div {
-  width: 10px;
-  height: 10px;
-  margin-top: -4px;
-  background-color: #bdbdbd;
-}
-
-ui-multi-handle .range > div::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  -webkit-transform: rotate(90deg) scale(0);
-  transform: rotate(90deg) scale(0);
-  z-index: -1;
-  border-top: 13px solid transparent;
-  border-bottom: 13px solid transparent;
-  border-left: 14px solid #F44336;
-  transition: all 200ms ease-in-out;
-}
-
-ui-multi-handle .range > div.active::before {
-  -webkit-transform: rotate(90deg) scale(1);
-  transform: rotate(90deg) scale(1);
-  bottom: -24px;
-  transition: all 200ms 100ms ease-in-out;
-}
-
-ui-multi-handle .range > div::after {
-  content: '';
-  display: block;
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
-  background-color: transparent;
-}
-
-ui-multi-handle .start {
-  left: 0;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
-}
-
-ui-multi-handle .range > div.active {
-  -webkit-transform: translate(-50%, -80%);
-  transform: translate(-50%, -80%);
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  margin-top: -16px;
-}
-
-ui-multi-handle .range .end.active {
-  -webkit-transform: translate(50%, -80%);
-  transform: translate(50%, -80%);
-}
-
-ui-multi-handle .end {
-  right: 0;
-  -webkit-transform: translateX(50%);
-  transform: translateX(50%);
-}
-
-ui-multi-handle .value {
-  font-size: 11px;
-  white-space: nowrap;
-  margin: auto;
-  transition: all 100ms ease-in-out;
-}
-
-ui-multi-handle .value.ng-enter {
-  opacity: 0;
-}
-
-ui-multi-handle .value.ng-leave {
-  transition: none;
 }
 ui-profile-float {
   width: 80px;
