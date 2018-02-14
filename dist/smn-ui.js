@@ -9,46 +9,6 @@
 (function () {
 	'use strict';
 
-	angular.module('smn-ui').directive('uiMenuItem', uiMenuItem);
-
-	uiMenuItem.$inject = ['$compile', '$templateCache'];
-
-	function uiMenuItem($compile, $templateCache) {
-		var directive = {
-			require: '^uiMainMenu',
-			link: link,
-			restrict: 'E',
-			template:'<div class="item-wrap"><a ng-href="{{item[config.href] || \'\'}}" ng-class="{\'has-submenu\': item[config.submenu]}" ng-click="item[config.submenu] ? openMenu() : (item[config.href] && menuClick())"><i class="material-icons option-icon" ng-class="{\'arrow-drop\': item[config.submenu]}" ng-if="item[config.submenu] || item[config.icon]">{{item[config.icon] || \'arrow_drop_down\'}}</i> {{item[config.name]}}</a><div ng-if="config.fav && item[config.href] && !item.denied"><i class="material-icons" ng-if="!item[config.fav.attr]" ng-click="config.fav.active(item)">{{config.fav.icon || \'favorite_border\'}}</i> <i class="material-icons" ng-if="item[config.fav.attr]" ng-click="config.fav.inative(item)" style="color:#E53935" ng-style="{color: config.fav.activeColor}">{{config.fav.iconActive || \'favorite\'}}</i></div></div>',
-			scope: {
-				'item': '=',
-				'list': '=',
-				'level': '=',
-				'isOpen': '='
-			}
-		};
-		return directive;
-
-		function link(scope, element, attrs, ctrl) {
-			scope.isOpen = false;
-			scope.menuClick = ctrl.menuClick;
-			scope.config = ctrl.config;
-			scope.openMenu = function () {
-				if (scope.item[scope.config.submenu]) scope.isOpen = !scope.isOpen;
-			};
-			scope.buttonOffset = scope.level != 1 ? 36 * (scope.level - 1) + 'px' : 0;
-			if (scope.list) {
-				$compile('<ui-menu-list class="drawer-slide-vertical" list="list" config="config" parent-level="level" ng-hide="!isOpen"></ui-menu-list>')(scope, function (cloned, scope) {
-					element.append(cloned);
-				});
-			}
-		}
-	}
-})();
-'use strict';
-
-(function () {
-	'use strict';
-
 	angular.module('smn-ui').directive('uiMenuList', uiMenuList);
 
 	uiMenuList.$inject = ['$templateCache'];
@@ -196,6 +156,46 @@
 				}
 			}
 			doneFn();
+		}
+	}
+})();
+'use strict';
+
+(function () {
+	'use strict';
+
+	angular.module('smn-ui').directive('uiMenuItem', uiMenuItem);
+
+	uiMenuItem.$inject = ['$compile', '$templateCache'];
+
+	function uiMenuItem($compile, $templateCache) {
+		var directive = {
+			require: '^uiMainMenu',
+			link: link,
+			restrict: 'E',
+			template:'<div class="item-wrap"><a ng-href="{{item[config.href] || \'\'}}" ng-class="{\'has-submenu\': item[config.submenu]}" ng-click="item[config.submenu] ? openMenu() : (item[config.href] && menuClick())"><i class="material-icons option-icon" ng-class="{\'arrow-drop\': item[config.submenu]}" ng-if="item[config.submenu] || item[config.icon]">{{item[config.icon] || \'arrow_drop_down\'}}</i> {{item[config.name]}}</a><div ng-if="config.fav && item[config.href] && !item.denied"><i class="material-icons" ng-if="!item[config.fav.attr]" ng-click="config.fav.active(item)">{{config.fav.icon || \'favorite_border\'}}</i> <i class="material-icons" ng-if="item[config.fav.attr]" ng-click="config.fav.inative(item)" style="color:#E53935" ng-style="{color: config.fav.activeColor}">{{config.fav.iconActive || \'favorite\'}}</i></div></div>',
+			scope: {
+				'item': '=',
+				'list': '=',
+				'level': '=',
+				'isOpen': '='
+			}
+		};
+		return directive;
+
+		function link(scope, element, attrs, ctrl) {
+			scope.isOpen = false;
+			scope.menuClick = ctrl.menuClick;
+			scope.config = ctrl.config;
+			scope.openMenu = function () {
+				if (scope.item[scope.config.submenu]) scope.isOpen = !scope.isOpen;
+			};
+			scope.buttonOffset = scope.level != 1 ? 36 * (scope.level - 1) + 'px' : 0;
+			if (scope.list) {
+				$compile('<ui-menu-list class="drawer-slide-vertical" list="list" config="config" parent-level="level" ng-hide="!isOpen"></ui-menu-list>')(scope, function (cloned, scope) {
+					element.append(cloned);
+				});
+			}
 		}
 	}
 })();
@@ -670,6 +670,96 @@
 (function () {
     'use strict';
 
+    uiMaskCpf.$inject = ["uiCpfFilter"];
+    angular.module('smn-ui').directive('uiMaskCpf', uiMaskCpf);
+
+    function uiMaskCpf(uiCpfFilter) {
+        var directive = {
+            restrict: 'A',
+            link: link,
+            require: 'ngModel'
+        };
+        return directive;
+
+        function link(scope, element, attrs, ctrl) {
+            ctrl.$parsers.push(function (value) {
+                var viewValue = uiCpfFilter(value);
+                ctrl.$setValidity('cpf', isValidCpf(viewValue));
+                ctrl.$setViewValue(viewValue);
+                ctrl.$render();
+                if (viewValue.length === 14) return viewValue.replace(/[^0-9]+/g, '');
+                if (!viewValue) return '';
+            });
+
+            ctrl.$formatters.push(function (value) {
+                value = typeof value == 'number' ? value.toString() : value;
+                if (value) value = ("00000000000" + value).substring(11 + value.length - 11);
+                return uiCpfFilter(value);
+            });
+
+            function isValidCpf(cpf) {
+                if (!cpf) return true;
+
+                if (cpf.length >= 14) {
+                    var valid = true;
+
+                    cpf = cpf.replace(/[^\d]+/g, '');
+
+                    if (cpf.length != 11) valid = false;
+
+                    var sum;
+                    var rest;
+                    sum = 0;
+                    if (cpf == "00000000000" || cpf == "11111111111" || cpf == "22222222222" || cpf == "33333333333" || cpf == "44444444444" || cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" || cpf == "88888888888" || cpf == "99999999999") valid = false;
+
+                    for (var i = 1; i <= 9; i++) {
+                        sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+                    }rest = sum * 10 % 11;
+
+                    if (rest == 10 || rest == 11) rest = 0;
+                    if (rest != parseInt(cpf.substring(9, 10))) valid = false;
+
+                    sum = 0;
+                    for (var i = 1; i <= 10; i++) {
+                        sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+                    }rest = sum * 10 % 11;
+
+                    if (rest == 10 || rest == 11) rest = 0;
+                    if (rest != parseInt(cpf.substring(10, 11))) valid = false;
+
+                    if (!valid) return false;
+                }
+                return true;
+            }
+        }
+    }
+})();
+'use strict';
+
+(function () {
+    'use strict';
+
+    angular.module('smn-ui').filter('uiCpf', uiCpf);
+
+    function uiCpf() {
+        return uiCpfFilter;
+
+        function uiCpfFilter(cpf) {
+            if (!cpf) return '';
+            cpf = cpf.toString().replace(/[^0-9]+/g, '');
+            if (cpf.length > 3) cpf = cpf.substring(0, 3) + '.' + cpf.substring(3);
+            if (cpf.length > 7) cpf = cpf.substring(0, 7) + '.' + cpf.substring(7);
+            if (cpf.length > 11) cpf = cpf.substring(0, 11) + '-' + cpf.substring(11);
+            if (cpf.length > 14) cpf = cpf.substring(0, 14);
+            return cpf;
+        }
+    }
+})();
+'use strict';
+
+(function () {
+    'use strict';
+
     uiMaskCnpj.$inject = ["uiCnpjFilter", "$timeout"];
     angular.module('smn-ui').directive('uiMaskCnpj', uiMaskCnpj);
 
@@ -825,96 +915,6 @@
             if (cnpj.length > 15) cnpj = cnpj.substring(0, 15) + '-' + cnpj.substring(15);
             if (cnpj.length > 18) cnpj = cnpj.substring(0, 18);
             return cnpj;
-        }
-    }
-})();
-'use strict';
-
-(function () {
-    'use strict';
-
-    uiMaskCpf.$inject = ["uiCpfFilter"];
-    angular.module('smn-ui').directive('uiMaskCpf', uiMaskCpf);
-
-    function uiMaskCpf(uiCpfFilter) {
-        var directive = {
-            restrict: 'A',
-            link: link,
-            require: 'ngModel'
-        };
-        return directive;
-
-        function link(scope, element, attrs, ctrl) {
-            ctrl.$parsers.push(function (value) {
-                var viewValue = uiCpfFilter(value);
-                ctrl.$setValidity('cpf', isValidCpf(viewValue));
-                ctrl.$setViewValue(viewValue);
-                ctrl.$render();
-                if (viewValue.length === 14) return viewValue.replace(/[^0-9]+/g, '');
-                if (!viewValue) return '';
-            });
-
-            ctrl.$formatters.push(function (value) {
-                value = typeof value == 'number' ? value.toString() : value;
-                if (value) value = ("00000000000" + value).substring(11 + value.length - 11);
-                return uiCpfFilter(value);
-            });
-
-            function isValidCpf(cpf) {
-                if (!cpf) return true;
-
-                if (cpf.length >= 14) {
-                    var valid = true;
-
-                    cpf = cpf.replace(/[^\d]+/g, '');
-
-                    if (cpf.length != 11) valid = false;
-
-                    var sum;
-                    var rest;
-                    sum = 0;
-                    if (cpf == "00000000000" || cpf == "11111111111" || cpf == "22222222222" || cpf == "33333333333" || cpf == "44444444444" || cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" || cpf == "88888888888" || cpf == "99999999999") valid = false;
-
-                    for (var i = 1; i <= 9; i++) {
-                        sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
-                    }rest = sum * 10 % 11;
-
-                    if (rest == 10 || rest == 11) rest = 0;
-                    if (rest != parseInt(cpf.substring(9, 10))) valid = false;
-
-                    sum = 0;
-                    for (var i = 1; i <= 10; i++) {
-                        sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
-                    }rest = sum * 10 % 11;
-
-                    if (rest == 10 || rest == 11) rest = 0;
-                    if (rest != parseInt(cpf.substring(10, 11))) valid = false;
-
-                    if (!valid) return false;
-                }
-                return true;
-            }
-        }
-    }
-})();
-'use strict';
-
-(function () {
-    'use strict';
-
-    angular.module('smn-ui').filter('uiCpf', uiCpf);
-
-    function uiCpf() {
-        return uiCpfFilter;
-
-        function uiCpfFilter(cpf) {
-            if (!cpf) return '';
-            cpf = cpf.toString().replace(/[^0-9]+/g, '');
-            if (cpf.length > 3) cpf = cpf.substring(0, 3) + '.' + cpf.substring(3);
-            if (cpf.length > 7) cpf = cpf.substring(0, 7) + '.' + cpf.substring(7);
-            if (cpf.length > 11) cpf = cpf.substring(0, 11) + '-' + cpf.substring(11);
-            if (cpf.length > 14) cpf = cpf.substring(0, 14);
-            return cpf;
         }
     }
 })();
@@ -1411,47 +1411,6 @@
 (function () {
     'use strict';
 
-    angular.module('smn-ui').directive('uiMainMenu', uiMainMenu);
-
-    uiMainMenu.$inject = ['$templateCache'];
-
-    function uiMainMenu($templateCache) {
-        var directive = {
-            restrict: 'E',
-            template:'<ui-menu-list class="drawer-slide" list="vm.menuList" parent-level="vm.level"></ui-menu-list>',
-            scope: {
-                'menuList': '=',
-                'config': '=?',
-                'menuClick': '&?'
-            },
-            bindToController: true,
-            controller: uiMainMenuController,
-            controllerAs: 'vm'
-        };
-        return directive;
-    }
-
-    uiMainMenuController.$inject = ['$scope'];
-
-    function uiMainMenuController($scope) {
-
-        var vm = this;
-        vm.level = 0;
-
-        if (vm.config) {
-            if (!vm.config.submenu) vm.config.submenu = 'submenu';
-            if (!vm.config.favorite) vm.config.favorite = 'favorite';
-            if (!vm.config.name) vm.config.name = 'name';
-            if (!vm.config.icon) vm.config.icon = 'icon';
-            if (!vm.config.href) vm.config.href = 'href';
-        }
-    }
-})();
-'use strict';
-
-(function () {
-    'use strict';
-
     uiToolbar.$inject = ["$timeout"];
     angular.module('smn-ui').factory('uiToolbar', uiToolbar);
 
@@ -1494,6 +1453,47 @@
     }
 })();
 "use strict";
+'use strict';
+
+(function () {
+    'use strict';
+
+    angular.module('smn-ui').directive('uiMainMenu', uiMainMenu);
+
+    uiMainMenu.$inject = ['$templateCache'];
+
+    function uiMainMenu($templateCache) {
+        var directive = {
+            restrict: 'E',
+            template:'<ui-menu-list class="drawer-slide" list="vm.menuList" parent-level="vm.level"></ui-menu-list>',
+            scope: {
+                'menuList': '=',
+                'config': '=?',
+                'menuClick': '&?'
+            },
+            bindToController: true,
+            controller: uiMainMenuController,
+            controllerAs: 'vm'
+        };
+        return directive;
+    }
+
+    uiMainMenuController.$inject = ['$scope'];
+
+    function uiMainMenuController($scope) {
+
+        var vm = this;
+        vm.level = 0;
+
+        if (vm.config) {
+            if (!vm.config.submenu) vm.config.submenu = 'submenu';
+            if (!vm.config.favorite) vm.config.favorite = 'favorite';
+            if (!vm.config.name) vm.config.name = 'name';
+            if (!vm.config.icon) vm.config.icon = 'icon';
+            if (!vm.config.href) vm.config.href = 'href';
+        }
+    }
+})();
 'use strict';
 
 (function () {

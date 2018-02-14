@@ -15,44 +15,59 @@ let versionValue, versionUpdate, commitMessage;
     if (!['patch', 'minor', 'major'].includes(versionUpdate)) return console.log("Versão informada não existe, tipos:['patch', 'minor', 'major']");
     versionValue = versionUpdate == 'patch' ? 2 : versionUpdate == 'minor' ? 1 : 0;
 
-    await update();
+    await init();
 })();
 
-async function update() {
+async function init() {
     try {
         console.log('START SERVICE...');
 
-        console.log('BUILD FILES  ...');
-        await prom('gulp build');
+        await build();
 
-        const jsons = prepareJSON();
-        console.log('GIT PROCESS  ...');
+        const version = prepareJSON();
 
-        await prom('git add .');
-        await prom(`git commit -m "${commitMessage || (`Update -${versionUpdate}- para versão v${jsons.objPackage.version}`)}"`);
-        await prom('git push');
-        await prom(`git tag v${jsons.objPackage.version}`);
-        await prom(`git push origin v${jsons.objPackage.version}`);
+        await git(version);
 
-        console.log('NPM PUBLISH  ...');
-
-        if (await verificarUserNpm())
-            await prom(`npm publish`);
-        else if (await confirmLogNpm()) {
-            await prom('start cmd.exe /K npm adduser')
-
-            if (await verificarUserNpm())
-                await prom(`npm publish`);
-            else
-                console.error('Conta npm não autenticada, verifique para publicar.')
-        }
-        process.exit(-1);
+        await npm();
 
         end();
     } catch (ex) {
         end(ex);
     }
 }
+
+// COMMANDS
+
+async function git(version) {
+    console.log('GIT PROCESS  ...');
+    await prom('git add .');
+    await prom(`git commit -m "${commitMessage || (`Update -${versionUpdate}- para versão ${version}`)}"`);
+    await prom('git push');
+    await prom(`git tag ${version}`);
+    await prom(`git push origin ${version}`);
+}
+
+async function build() {
+    console.log('BUILD FILES  ...');
+    await prom('gulp build');
+}
+
+async function npm() {
+    console.log('NPM PUBLISH  ...');
+
+    if (await verificarUserNpm())
+        await prom(`npm publish`);
+    else if (await confirmLogNpm()) {
+        await prom('start cmd.exe /K npm adduser')
+
+        if (await verificarUserNpm())
+            await prom(`npm publish`);
+        else
+            console.error('Conta npm não autenticada, verifique para publicar.')
+    }
+}
+
+// FUNCTIONS
 
 async function prom(command) {
     return new Promise((resolve, reject) => {
@@ -134,11 +149,7 @@ function prepareJSON() {
     fs.writeFileSync(path.join(process.cwd(), 'bower.json'), JSON.stringify(objBower, null, 4));
     fs.writeFileSync(path.join(process.cwd(), 'dist/package.json'), JSON.stringify(objPackDist, null, 4));
 
-    return {
-        objPackage,
-        objBower,
-        objPackDist
-    }
+    return objPackDist.version;
 }
 
 /*
