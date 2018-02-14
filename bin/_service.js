@@ -80,8 +80,8 @@ async function prom(command) {
             if (err) return reject(err);
             if (out && out.trim()) {
                 console.log(colors[listEdit[listEdit.length - 1]](out));
-                listEdit.pop();
             }
+            listEdit.pop();
             resolve(out);
         })
     });
