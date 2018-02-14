@@ -75,7 +75,7 @@ async function prom(command) {
     return new Promise((resolve, reject) => {
         exec(command, (err, out) => {
             if (err) return reject(err);
-            if (out && out.trim()) console.log(out);
+            if (out && out.trim()) console.log(colors.blue(out));
             resolve(out);
         })
     });
