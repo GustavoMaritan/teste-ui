@@ -56,12 +56,12 @@ async function npm() {
     console.log('NPM PUBLISH  ...');
 
     if (await verificarUserNpm())
-        await prom(`npm publish`);
+        console.log('PUBLICADO');//await prom(`npm publish`);
     else if (await confirmLogNpm()) {
         await prom('start cmd.exe /K npm adduser')
 
         if (await verificarUserNpm())
-            await prom(`npm publish`);
+            console.log('PUBLICADO');//await prom(`npm publish`);
         else
             console.error('Conta npm não autenticada, verifique para publicar.')
     }
@@ -115,7 +115,7 @@ async function confirmLogNpm() {
                 properties: {
                     confirm: {
                         pattern: /^(?:[yY]|[nN])$/,
-                        description: 'Deseja conectar ao npm para publicar (y|n)?',
+                        description: 'Deseja se conectar ao npm para publicar (y|n)?',
                         message: 'Informe (y ou n) para continuar.',
                         required: true
                     }
@@ -151,13 +151,3 @@ function prepareJSON() {
 
     return objPackDist.version;
 }
-
-/*
-    await prom('gulp build');
-    await prom('git add .');
-    await prom(`git commit -m "${commitMessage || (`Update -${versionUpdate}- para versão v${objPackage.version}`)}"`);
-    await prom('git push');
-    await prom(`git tag v${objPackage.version}`);
-    await prom(`git push origin v${objPackage.version}`);
-    await prom(`npm publish`);
-*/
