@@ -3,6 +3,7 @@ src/*.min.*
 src/smn-ui.*
 **/*.templates.js
 .idea
+.vscode
 
 docs/src/content/lib
 docs/src/index.html
