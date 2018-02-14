@@ -72,7 +72,6 @@ async function npm() {
 // FUNCTIONS
 
 async function prom(command) {
-
     const col = ['yellow', 'blue', 'cyan', 'white', 'gray', 'grey'];
 
     return new Promise((resolve, reject) => {

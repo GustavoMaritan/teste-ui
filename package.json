@@ -1,6 +1,6 @@
 {
     "name": "test-pack-ui",
-    "version": "2.1.3",
+    "version": "2.1.4",
     "description": "Apenas TEstes",
     "scripts": {
         "patch": "node bin/_service.js patch",
