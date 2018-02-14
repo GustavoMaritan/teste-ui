@@ -1,18 +1,14 @@
 {
     "name": "smn-ui",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "description": "Pacote de componentes de interface desenvolvidos com AngularJS e Material Design",
-    "scripts": {},
     "repository": {
         "type": "git",
         "url": "git+https://github.com/smn-official/dist-smn-ui.git"
     },
-    "authors": [
-        "Mario Santos <mariocsants@gmail.com>"
-    ],
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/smn-official/dist-smn-ui/issues"
+        "url": "https://github.com/smn-official/smn-ui/issues"
     },
-    "homepage": "https://github.com/smn-official/dist-smn-ui#readme"
+    "homepage": "https://github.com/smn-official/smn-ui#readme"
 }

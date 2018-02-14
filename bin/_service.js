@@ -79,16 +79,6 @@ async function prom(command) {
     });
 }
 
-function end(ex) {
-    console.log('______________________________________________________________________');
-    if (ex) {
-        console.log('### ERROUU ###');
-        console.log(ex);
-    } else
-        console.log(':: EXIT....');
-    console.log('______________________________________________________________________');
-}
-
 async function verificarUserNpm() {
     let user;
     try {
@@ -150,4 +140,14 @@ function prepareJSON() {
     fs.writeFileSync(path.join(process.cwd(), 'dist/package.json'), JSON.stringify(objPackDist, null, 4));
 
     return objPackDist.version;
+}
+
+function end(ex) {
+    console.log('______________________________________________________________________');
+    if (ex) {
+        console.log('### ERROUU ###');
+        console.log(ex);
+    } else
+        console.log(':: EXIT....');
+    console.log('______________________________________________________________________');
 }
