@@ -72,10 +72,13 @@ async function npm() {
 // FUNCTIONS
 
 async function prom(command) {
+
+    const col = ['yellow', 'blue', 'cyan', 'white', 'gray', 'grey'];
+
     return new Promise((resolve, reject) => {
         exec(command, (err, out) => {
             if (err) return reject(err);
-            if (out && out.trim()) console.log(colors.blue(out));
+            if (out && out.trim()) console.log(colors[col[Math.floor((Math.random() * 6))]](out));
             resolve(out);
         })
     });
