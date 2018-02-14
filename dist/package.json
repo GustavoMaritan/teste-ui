@@ -1,6 +1,6 @@
 {
     "name": "smn-ui",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "description": "Pacote de componentes de interface desenvolvidos com AngularJS e Material Design",
     "repository": {
         "type": "git",

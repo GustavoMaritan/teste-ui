@@ -204,60 +204,6 @@
 (function () {
     'use strict';
 
-    uiMaskPhone.$inject = ["uiPhoneFilter"];
-    angular.module('smn-ui').directive('uiMaskPhone', uiMaskPhone);
-
-    function uiMaskPhone(uiPhoneFilter) {
-        var directive = {
-            restrict: 'A',
-            link: link,
-            require: 'ngModel'
-        };
-        return directive;
-
-        function link(scope, element, attrs, ctrl) {
-            ctrl.$parsers.push(function (value) {
-                var viewValue = uiPhoneFilter(value);
-                ctrl.$setViewValue(viewValue);
-                ctrl.$render();
-                if (viewValue.length === 14 || viewValue.length === 15) return viewValue.replace(/[^0-9]+/g, '');
-                if (!viewValue) return '';
-            });
-
-            ctrl.$formatters.push(function (value) {
-                return uiPhoneFilter(value);
-            });
-        }
-    }
-})();
-'use strict';
-
-(function () {
-    'use strict';
-
-    angular.module('smn-ui').filter('uiPhone', uiPhone);
-
-    function uiPhone() {
-        return uiPhoneFilter;
-
-        ////////////////
-
-        function uiPhoneFilter(phone) {
-            if (!phone) return;
-            phone = phone.toString().replace(/[^0-9]+/g, '');
-            if (phone.length > 0) phone = '(' + phone;
-            if (phone.length > 3) phone = phone.substring(0, 3) + ') ' + phone.substring(3);
-            if (phone.length > 9 && phone.length < 14) phone = phone.substring(0, 9) + '-' + phone.substring(9);else if (phone.length > 13) phone = phone.substring(0, 10) + '-' + phone.substring(10);
-            if (phone.length > 15) phone = phone.substring(0, 15);
-            return phone;
-        }
-    }
-})();
-'use strict';
-
-(function () {
-    'use strict';
-
     uiMaskPhonenumber.$inject = ["uiPhonenumberFilter", "$timeout"];
     angular.module('smn-ui').directive('uiMaskPhonenumber', uiMaskPhonenumber);
 
@@ -357,6 +303,60 @@
             if (phonenumber.length > 4 && phonenumber.length < 9) phonenumber = phonenumber.substring(0, 4) + '-' + phonenumber.substring(4);else if (phonenumber.length > 8) phonenumber = phonenumber.substring(0, 5) + '-' + phonenumber.substring(5);
             if (phonenumber.length > 10) phonenumber = phonenumber.substring(0, 10);
             return phonenumber;
+        }
+    }
+})();
+'use strict';
+
+(function () {
+    'use strict';
+
+    uiMaskPhone.$inject = ["uiPhoneFilter"];
+    angular.module('smn-ui').directive('uiMaskPhone', uiMaskPhone);
+
+    function uiMaskPhone(uiPhoneFilter) {
+        var directive = {
+            restrict: 'A',
+            link: link,
+            require: 'ngModel'
+        };
+        return directive;
+
+        function link(scope, element, attrs, ctrl) {
+            ctrl.$parsers.push(function (value) {
+                var viewValue = uiPhoneFilter(value);
+                ctrl.$setViewValue(viewValue);
+                ctrl.$render();
+                if (viewValue.length === 14 || viewValue.length === 15) return viewValue.replace(/[^0-9]+/g, '');
+                if (!viewValue) return '';
+            });
+
+            ctrl.$formatters.push(function (value) {
+                return uiPhoneFilter(value);
+            });
+        }
+    }
+})();
+'use strict';
+
+(function () {
+    'use strict';
+
+    angular.module('smn-ui').filter('uiPhone', uiPhone);
+
+    function uiPhone() {
+        return uiPhoneFilter;
+
+        ////////////////
+
+        function uiPhoneFilter(phone) {
+            if (!phone) return;
+            phone = phone.toString().replace(/[^0-9]+/g, '');
+            if (phone.length > 0) phone = '(' + phone;
+            if (phone.length > 3) phone = phone.substring(0, 3) + ') ' + phone.substring(3);
+            if (phone.length > 9 && phone.length < 14) phone = phone.substring(0, 9) + '-' + phone.substring(9);else if (phone.length > 13) phone = phone.substring(0, 10) + '-' + phone.substring(10);
+            if (phone.length > 15) phone = phone.substring(0, 15);
+            return phone;
         }
     }
 })();
@@ -1645,67 +1645,6 @@
 (function () {
     'use strict';
 
-    angular.module('smn-ui').filter('uiInteger', uiInteger);
-
-    function uiInteger() {
-        return uiIntegerFilter;
-
-        ////////////////
-
-        function uiIntegerFilter(value) {
-            if (value === undefined || value === null) return null;
-            value = value.toString().replace(/\D+/g, '');
-            value = value ? parseInt(value) : null;
-            return value;
-        }
-    }
-})();
-'use strict';
-
-(function () {
-    'use strict';
-
-    angular.module('smn-ui').directive('uiInteger', uiInteger);
-
-    uiInteger.$inject = ['uiIntegerFilter'];
-
-    function uiInteger(uiIntegerFilter) {
-        var directive = {
-            restrict: 'A',
-            link: link,
-            require: 'ngModel',
-            scope: {
-                uiIntegerDigitMax: '=?'
-            }
-        };
-        return directive;
-
-        function link(scope, element, attrs, ctrl) {
-            ctrl.$parsers.push(function (value) {
-                var viewValue = formatValue(value);
-                ctrl.$setViewValue(viewValue);
-                ctrl.$render();
-                return viewValue;
-            });
-            ctrl.$formatters.push(formatValue);
-            function formatValue(value) {
-                var newValue = uiIntegerFilter(value);
-                if (scope.uiIntegerDigitMax && typeof newValue === 'number') {
-                    var maxDigit = parseInt(scope.uiIntegerDigitMax);
-                    if (!isNaN(maxDigit)) {
-                        newValue = parseInt(newValue.toString().substring(0, maxDigit));
-                    }
-                }
-                return newValue;
-            }
-        }
-    }
-})();
-'use strict';
-
-(function () {
-    'use strict';
-
     uiMaskDate.$inject = ["$filter", "$timeout"];
     angular.module('smn-ui').directive('uiMaskDate', uiMaskDate);
 
@@ -1845,6 +1784,67 @@
                         }
                     }
                 }
+            }
+        }
+    }
+})();
+'use strict';
+
+(function () {
+    'use strict';
+
+    angular.module('smn-ui').filter('uiInteger', uiInteger);
+
+    function uiInteger() {
+        return uiIntegerFilter;
+
+        ////////////////
+
+        function uiIntegerFilter(value) {
+            if (value === undefined || value === null) return null;
+            value = value.toString().replace(/\D+/g, '');
+            value = value ? parseInt(value) : null;
+            return value;
+        }
+    }
+})();
+'use strict';
+
+(function () {
+    'use strict';
+
+    angular.module('smn-ui').directive('uiInteger', uiInteger);
+
+    uiInteger.$inject = ['uiIntegerFilter'];
+
+    function uiInteger(uiIntegerFilter) {
+        var directive = {
+            restrict: 'A',
+            link: link,
+            require: 'ngModel',
+            scope: {
+                uiIntegerDigitMax: '=?'
+            }
+        };
+        return directive;
+
+        function link(scope, element, attrs, ctrl) {
+            ctrl.$parsers.push(function (value) {
+                var viewValue = formatValue(value);
+                ctrl.$setViewValue(viewValue);
+                ctrl.$render();
+                return viewValue;
+            });
+            ctrl.$formatters.push(formatValue);
+            function formatValue(value) {
+                var newValue = uiIntegerFilter(value);
+                if (scope.uiIntegerDigitMax && typeof newValue === 'number') {
+                    var maxDigit = parseInt(scope.uiIntegerDigitMax);
+                    if (!isNaN(maxDigit)) {
+                        newValue = parseInt(newValue.toString().substring(0, maxDigit));
+                    }
+                }
+                return newValue;
             }
         }
     }
@@ -2445,6 +2445,110 @@
 'use strict';
 
 (function () {
+	'use strict';
+
+	angular.module('smn-ui').directive('uiTreeView', uiTreeViewDirective);
+
+	uiTreeViewDirective.$inject = ['$timeout'];
+
+	function uiTreeViewDirective($timeout) {
+		var directive = {
+			bindToController: true,
+			controller: uiTreeViewController,
+			controllerAs: 'vm',
+			restrict: 'E',
+			template:'<ui-tree-view-list list="vm.list"></ui-tree-view-list>',
+			scope: {
+				'list': '=',
+				'config': '=?',
+				'optionClick': '&?',
+				'actions': '=?',
+				'actionsTemplate': '@?'
+			}
+		};
+		return directive;
+	}
+	function uiTreeViewController() {
+		var vm = this;
+
+		vm.config = vm.config || {};
+
+		if (!vm.config.submenu) vm.config.submenu = 'submenu';
+		if (!vm.config.name) vm.config.name = 'name';
+		if (!vm.config.href) vm.config.href = 'href';
+	}
+})();
+'use strict';
+
+(function () {
+	'use strict';
+
+	angular.module('smn-ui').directive('uiTreeViewList', uiTreeViewListDirective);
+
+	uiTreeViewListDirective.$inject = ['$timeout'];
+
+	function uiTreeViewListDirective($timeout) {
+		var directive = {
+			require: '^uiTreeView',
+			link: link,
+			restrict: 'E',
+			template:'<div class="offset"></div><div class="options"><ui-tree-view-item ng-repeat="option in list" option="option"></ui-tree-view-item></div>',
+			scope: {
+				list: '='
+			}
+		};
+		return directive;
+
+		function link(scope, element, attrs, ctrl) {}
+	}
+})();
+'use strict';
+
+(function () {
+	'use strict';
+
+	angular.module('smn-ui').directive('uiTreeViewItem', uiTreeViewItemDirective);
+
+	uiTreeViewItemDirective.$inject = ['$compile', '$templateCache'];
+
+	function uiTreeViewItemDirective($compile, $templateCache) {
+		var directive = {
+			require: '^uiTreeView',
+			template:'<div class="option-wrap" ng-class="{\'submenu\': option[config.submenu].length, \'open\': option.open}"><div class="icon-wrap"><button ng-if="option[config.submenu].length" ng-click="open(option, $event)"><i class="material-icons">arrow_drop_down</i></button></div><div class="name" ng-bind="option[config.name]" ng-click="open(option, $event, true)"></div></div><div class="list-wrap"><ui-tree-view-list class="drawer-slide-vertical keep-opacity" list="option[config.submenu]" ng-show="option.open"></ui-tree-view-list></div>',
+			link: link,
+			restrict: 'E',
+			scope: {
+				option: '='
+			}
+		};
+		return directive;
+
+		function link(scope, element, attrs, ctrl) {
+			scope.config = ctrl.config;
+			scope.actions = ctrl.actions;
+			scope.open = open;
+
+			if (ctrl.actionsTemplate) {
+				var actionsHtml = $templateCache.get(ctrl.actionsTemplate),
+				    actionsTemplate = $compile(actionsHtml)(scope);
+				element.children('.option-wrap').append(actionsTemplate);
+			}
+
+			function open(option, event, clickName) {
+				option.open = !option.open;
+
+				if (clickName && !option[scope.config.submenu]) {
+					scope.actions.clickName(option);
+				}
+
+				event.preventDefault();
+			}
+		}
+	}
+})();
+'use strict';
+
+(function () {
     'use strict';
 
     angular.module('smn-ui').directive('uiTabs', uiTabs);
@@ -2644,110 +2748,6 @@
             });
         }
     }
-})();
-'use strict';
-
-(function () {
-	'use strict';
-
-	angular.module('smn-ui').directive('uiTreeView', uiTreeViewDirective);
-
-	uiTreeViewDirective.$inject = ['$timeout'];
-
-	function uiTreeViewDirective($timeout) {
-		var directive = {
-			bindToController: true,
-			controller: uiTreeViewController,
-			controllerAs: 'vm',
-			restrict: 'E',
-			template:'<ui-tree-view-list list="vm.list"></ui-tree-view-list>',
-			scope: {
-				'list': '=',
-				'config': '=?',
-				'optionClick': '&?',
-				'actions': '=?',
-				'actionsTemplate': '@?'
-			}
-		};
-		return directive;
-	}
-	function uiTreeViewController() {
-		var vm = this;
-
-		vm.config = vm.config || {};
-
-		if (!vm.config.submenu) vm.config.submenu = 'submenu';
-		if (!vm.config.name) vm.config.name = 'name';
-		if (!vm.config.href) vm.config.href = 'href';
-	}
-})();
-'use strict';
-
-(function () {
-	'use strict';
-
-	angular.module('smn-ui').directive('uiTreeViewList', uiTreeViewListDirective);
-
-	uiTreeViewListDirective.$inject = ['$timeout'];
-
-	function uiTreeViewListDirective($timeout) {
-		var directive = {
-			require: '^uiTreeView',
-			link: link,
-			restrict: 'E',
-			template:'<div class="offset"></div><div class="options"><ui-tree-view-item ng-repeat="option in list" option="option"></ui-tree-view-item></div>',
-			scope: {
-				list: '='
-			}
-		};
-		return directive;
-
-		function link(scope, element, attrs, ctrl) {}
-	}
-})();
-'use strict';
-
-(function () {
-	'use strict';
-
-	angular.module('smn-ui').directive('uiTreeViewItem', uiTreeViewItemDirective);
-
-	uiTreeViewItemDirective.$inject = ['$compile', '$templateCache'];
-
-	function uiTreeViewItemDirective($compile, $templateCache) {
-		var directive = {
-			require: '^uiTreeView',
-			template:'<div class="option-wrap" ng-class="{\'submenu\': option[config.submenu].length, \'open\': option.open}"><div class="icon-wrap"><button ng-if="option[config.submenu].length" ng-click="open(option, $event)"><i class="material-icons">arrow_drop_down</i></button></div><div class="name" ng-bind="option[config.name]" ng-click="open(option, $event, true)"></div></div><div class="list-wrap"><ui-tree-view-list class="drawer-slide-vertical keep-opacity" list="option[config.submenu]" ng-show="option.open"></ui-tree-view-list></div>',
-			link: link,
-			restrict: 'E',
-			scope: {
-				option: '='
-			}
-		};
-		return directive;
-
-		function link(scope, element, attrs, ctrl) {
-			scope.config = ctrl.config;
-			scope.actions = ctrl.actions;
-			scope.open = open;
-
-			if (ctrl.actionsTemplate) {
-				var actionsHtml = $templateCache.get(ctrl.actionsTemplate),
-				    actionsTemplate = $compile(actionsHtml)(scope);
-				element.children('.option-wrap').append(actionsTemplate);
-			}
-
-			function open(option, event, clickName) {
-				option.open = !option.open;
-
-				if (clickName && !option[scope.config.submenu]) {
-					scope.actions.clickName(option);
-				}
-
-				event.preventDefault();
-			}
-		}
-	}
 })();
 'use strict';
 

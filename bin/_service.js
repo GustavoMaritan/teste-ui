@@ -3,7 +3,8 @@
 const fs = require('fs'),
     path = require('path'),
     Promise = require('promise'),
-    { exec } = require('child_process');
+    { exec } = require('child_process'),
+    colors = require("colors/safe");
 
 let versionValue, versionUpdate, commitMessage;
 
@@ -20,7 +21,8 @@ let versionValue, versionUpdate, commitMessage;
 
 async function init() {
     try {
-        console.log('START SERVICE...');
+        console.log(colors.bgMagenta.underline('**** START SERVICE ****'));
+        console.log('');
 
         await build();
 
@@ -39,7 +41,7 @@ async function init() {
 // COMMANDS
 
 async function git(version) {
-    console.log('GIT PROCESS  ...');
+    console.log(colors.magenta('GIT PROCESS  ...'));
     await prom('git add .');
     await prom(`git commit -m "${commitMessage || (`Update -${versionUpdate}- para versão ${version}`)}"`);
     await prom('git push');
@@ -48,22 +50,22 @@ async function git(version) {
 }
 
 async function build() {
-    console.log('BUILD FILES  ...');
+    console.log(colors.magenta('BUILD FILES  ...'));
     await prom('gulp build');
 }
 
 async function npm() {
-    console.log('NPM PUBLISH  ...');
+    console.log(colors.magenta('NPM PUBLISH  ...'));
 
     if (await verificarUserNpm())
         console.log('PUBLICADO');//await prom(`npm publish`);
     else if (await confirmLogNpm()) {
-        await prom('start cmd.exe /K npm adduser')
+        await prom('start cmd.exe /K "@echo off & npm adduser & exit"')
 
         if (await verificarUserNpm())
             console.log('PUBLICADO');//await prom(`npm publish`);
         else
-            console.error('Conta npm não autenticada, verifique para publicar.')
+            console.log(colors.red('Conta NPM não autenticada, verifique com administrador da conta.'));
     }
 }
 
@@ -99,13 +101,14 @@ async function confirmLogNpm() {
         const prompt = require('prompt');
         prompt.message = '';
         prompt.delimiter = '';
+
         return new Promise((resolve, reject) => {
             prompt.start();
             prompt.get({
                 properties: {
                     confirm: {
                         pattern: /^(?:[yY]|[nN])$/,
-                        description: 'Deseja se conectar ao npm para publicar (y|n)?',
+                        description: colors.green('Deseja se conectar ao npm para publicar (y|n)?'),
                         message: 'Informe (y ou n) para continuar.',
                         required: true
                     }
@@ -143,11 +146,11 @@ function prepareJSON() {
 }
 
 function end(ex) {
-    console.log('______________________________________________________________________');
+    console.log('\n');
+    console.log(colors.grey('______________________________________________________________________'));
     if (ex) {
-        console.log('### ERROUU ###');
-        console.log(ex);
+        console.log(colors.red('##### ERROUU #####'));
+        fs.writeFileSync(path.join(process.cwd(), `logs/log-${new Date().getTime()}.json`), JSON.stringify(ex, null, 4))
     } else
-        console.log(':: EXIT....');
-    console.log('______________________________________________________________________');
+        console.log(colors.yellow(':: EXIT....'));
 }
