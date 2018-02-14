@@ -1,6 +1,6 @@
 {
     "name": "test-pack-ui",
-    "version": "2.2.4",
+    "version": "3.0.0",
     "ignore": [
         "/*",
         "!dist"
